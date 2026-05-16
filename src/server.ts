@@ -1,27 +1,19 @@
 import { mkdirSync, existsSync } from "fs"
-import os from "os"
-import { UPLOAD_DIR, PORT } from "./constants"
+import { UPLOAD_DIR, PORT, CHUNKS_DIR } from "./constants"
 import { uploadRoute } from "./routes/upload"
+import { uploadChunkRoute } from "./routes/upload-chunk"
+import { mergeChunksRoute } from "./routes/merge-chunks"
 import { fileRoute } from "./routes/file"
 import { indexRoute } from "./routes"
+import { getLocalIP } from "./utils/ip"
 
 
 if (!existsSync(UPLOAD_DIR)) {
   mkdirSync(UPLOAD_DIR)
 }
 
-function getLocalIP() {
-  const nets = os.networkInterfaces()
-
-  for (const name of Object.keys(nets)) {
-    for (const net of nets[name] || []) {
-      if (net.family === "IPv4" && !net.internal) {
-        return net.address
-      }
-    }
-  }
-
-  return "localhost"
+if (!existsSync(CHUNKS_DIR)) {
+  mkdirSync(CHUNKS_DIR)
 }
 
 Bun.serve({
@@ -30,9 +22,23 @@ Bun.serve({
   async fetch(req: Request) {
     const url = new URL(req.url)
 
-    // 首页
     if (url.pathname === "/") {
       return indexRoute()
+    }
+
+    // 单个文件（保留）
+    if (url.pathname === "/upload" && req.method === "POST") {
+      return uploadRoute(req)
+    }
+
+    // 分块上传
+    if (url.pathname === "/upload-chunk" && req.method === "POST") {
+      return uploadChunkRoute(req)
+    }
+
+    // 合并分块
+    if (url.pathname === "/merge-chunks" && req.method === "POST") {
+      return mergeChunksRoute(req)
     }
 
     // 上传
