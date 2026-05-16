@@ -4,12 +4,35 @@ export function renderHomePage(files: string[]) {
 <html>
 <head>
   <title>LAN Share</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .drop {
+      border: 2px dashed #999;
+      padding: 40px;
+      text-align: center;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+
+    a {
+      display: block;
+      margin: 8px 0;
+    }
+  </style>
 </head>
 
 <body>
   <h1>LAN Share</h1>
-
-  <input type="file" id="fileInput" />
+  
+  <div class='drop'>
+    <input type="file" id="fileInput" />
+  </div>
 
   <h2>Files</h2>
 
