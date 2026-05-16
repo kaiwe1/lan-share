@@ -25,6 +25,7 @@ export async function uploadRoute(req: Request) {
     )
   }
 
+  console.log(`[upload] Received file ${file.name} (${(file.size / 1024).toFixed(1)} KB)`)  
   const buffer = await file.arrayBuffer()
 
   writeFileSync(

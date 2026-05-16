@@ -39,6 +39,8 @@ export async function mergeChunksRoute(req: Request) {
   const outputPath = join(UPLOAD_DIR, fileName)
   writeFileSync(outputPath, mergedData)
 
+  console.log(`[merge-chunks] Merged file saved to ${outputPath} (${mergedData.byteLength} bytes)`)  
+
   // 删除分块目录
   rmSync(fileChunkDir, { recursive: true })
 

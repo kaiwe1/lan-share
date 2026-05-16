@@ -16,7 +16,7 @@ export function renderHomePage(files: string[]) {
   ${files
     .map(
       (file) =>
-        `<a href="/files/${encodeURIComponent(file)}">${file}</a>`
+        `<div><a href="/files/${encodeURIComponent(file)}">${file}</a></div>`
     )
     .join("")}
 
